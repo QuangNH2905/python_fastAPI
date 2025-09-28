@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from motor.motor_asyncio import AsyncIOMotorClient
+from fastapi.middleware.cors import CORSMiddleware
 
 uri = "mongodb+srv://quangnh:Nguthisong123@pythoncluster.0rxopzz.mongodb.net/?retryWrites=true&w=majority&appName=pythonCluster"
 # Create a new client and connect to the server
@@ -15,6 +16,18 @@ db = client["student"]          # database tên student
 collection = db["student_management"]       # collection tên studen_management
 
 app = FastAPI()
+origins = [
+    "http://localhost:3000",  # hoặc domain frontend thật sự
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # KHÔNG dùng ["*"] nếu allow_credentials=True
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Send a ping to confirm a successful connection
 try:
     client.admin.command('ping')
